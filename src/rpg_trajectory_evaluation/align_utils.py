@@ -105,6 +105,9 @@ def alignSIM3(p_es, p_gt, q_es, q_gt, n_aligned=-1):
     est_pos = p_es[idxs, 0:3]
     gt_pos = p_gt[idxs, 0:3]
     s, R, t = align.align_umeyama(gt_pos, est_pos)  # note the order
+    print("scale: ", s)
+    print("R\n", R)
+    print("T\n", t)
     return s, R, t
 
 
