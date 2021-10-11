@@ -145,6 +145,7 @@ class Trajectory:
             return False
         self.accum_distances = traj_utils.get_distance_from_start(self.p_gt_raw)
         self.traj_length = self.accum_distances[-1]
+        print(Fore.GREEN+'GT Trajectory length: {0}'.format(self.traj_length))
         self.accum_distances = traj_utils.get_distance_from_start(self.p_gt)
 
         if os.path.isfile(self.cached_rel_err_fn):
@@ -280,6 +281,7 @@ class Trajectory:
             stats_trans = res_writer.compute_statistics(e_trans)
             stats_rot = res_writer.compute_statistics(e_rot)
             stats_scale = res_writer.compute_statistics(e_scale_perc)
+            stats_yaw = res_writer.compute_statistics(np.rad2deg(e_ypr[:, 0]))
 
             self.abs_errors['abs_e_trans'] = e_trans
             self.abs_errors['abs_e_trans_stats'] = stats_trans
@@ -290,6 +292,7 @@ class Trajectory:
             self.abs_errors['abs_e_rot_stats'] = stats_rot
 
             self.abs_errors['abs_e_ypr'] = e_ypr
+            self.abs_errors['abs_e_yaw_stats'] = stats_yaw
 
             self.abs_errors['abs_e_scale_perc'] = e_scale_perc
             self.abs_errors['abs_e_scale_stats'] = stats_scale
@@ -309,7 +312,10 @@ class Trajectory:
         res_writer.update_and_save_stats(
             self.abs_errors['abs_e_scale_stats'], 'scale',
             self.abs_err_stats_fn)
-
+        res_writer.update_and_save_stats(
+            self.abs_errors['abs_e_yaw_stats'], 'yaw',
+            self.abs_err_stats_fn)
+ 
         self.rel_error_stats_fns = []
         for dist in self.rel_errors:
             cur_err = self.rel_errors[dist]
