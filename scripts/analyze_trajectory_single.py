@@ -260,7 +260,7 @@ if __name__ == '__main__':
         if n_trials > 1:
             suffix = '_mt'
 
-        plot_types = ['rel_trans', 'rel_trans_perc', 'rel_yaw']
+        plot_types = ['rel_trans', 'rel_trans_perc', 'rel_rot', 'rel_yaw']
         rel_errors, distances = mt_error.get_relative_errors_and_distances(
             error_types=plot_types)
 
@@ -297,6 +297,17 @@ if __name__ == '__main__':
                            labels, colors)
         fig.tight_layout()
         fig.savefig(plot_dir_i+'/rel_yaw_error' + suffix + FORMAT,
+                    bbox_inches="tight")
+        plt.close(fig)
+
+        fig = plt.figure(figsize=(6, 2.5))
+        ax = fig.add_subplot(
+            111, xlabel='Distance traveled [m]',
+            ylabel='Rotation error [deg]')
+        pu.boxplot_compare(ax, distances, rel_errors['rel_rot'],
+                           labels, colors)
+        fig.tight_layout()
+        fig.savefig(plot_dir_i+'/rel_rot_error' + suffix + FORMAT,
                     bbox_inches="tight")
         plt.close(fig)
 
